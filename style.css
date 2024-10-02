@@ -1,0 +1,74 @@
+/* Hintergrundfarbe der gesamten Seite */
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #323232;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* Container für das Spielfeld zentrieren */
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 120px;
+}
+
+/* Tabelle ohne äußeren Rand */
+table {
+    border-collapse: collapse; /* Verhindert doppelte Ränder */
+}
+
+/* Zellen mit internen Trennlinien */
+td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: 5px solid white; /* Weiße innere Trennlinien */
+}
+
+/* Entfernt die äußeren Border der Tabelle */
+table tr:first-child td {
+    border-top: none;
+}
+table tr td:first-child {
+    border-left: none;
+}
+table tr:last-child td {
+    border-bottom: none;
+}
+table tr td:last-child {
+    border-right: none;
+}
+
+/* Hover-Effekt für die Zellen */
+td:hover {
+    background-color: #f0f0f0;
+}
+
+/* Darstellung der X- und O-Felder */
+td.cross {
+    color: #ff4c4c;
+}
+
+td.circle {
+    color: #4c6fff;
+}
+
+/* Responsive Anpassung für kleinere Bildschirme */
+@media (max-width: 600px) {
+    td {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+}

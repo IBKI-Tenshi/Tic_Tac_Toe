@@ -21,7 +21,8 @@ h1 {
 
 /* Tabelle ohne äußeren Rand */
 table {
-    border-collapse: collapse; /* Verhindert doppelte Ränder */
+    border-collapse: collapse;
+    /* Verhindert doppelte Ränder */
 }
 
 /* Zellen mit internen Trennlinien */
@@ -33,19 +34,23 @@ td {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
-    border: 5px solid white; /* Weiße innere Trennlinien */
+    border: 5px solid white;
+    /* Weiße innere Trennlinien */
 }
 
 /* Entfernt die äußeren Border der Tabelle */
 table tr:first-child td {
     border-top: none;
 }
+
 table tr td:first-child {
     border-left: none;
 }
+
 table tr:last-child td {
     border-bottom: none;
 }
+
 table tr td:last-child {
     border-right: none;
 }

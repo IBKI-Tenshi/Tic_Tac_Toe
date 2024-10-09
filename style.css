@@ -10,6 +10,16 @@ h1 {
     text-align: center;
 }
 
+#current-player {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#player-indicator {
+    font-weight: bold;
+}
+
 /* Container für das Spielfeld zentrieren */
 #container {
     display: flex;

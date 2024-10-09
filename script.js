@@ -27,6 +27,7 @@ let currentPlayer = 'cross'; // Startspieler
 
 function init() {
     render(); // Das Spielfeld wird beim Laden der Seite gerendert
+    updateCurrentPlayer();
 }
 
 function render() {
@@ -52,6 +53,17 @@ function render() {
     container.innerHTML = html; // Rendert das HTML in den Container
 }
 
+function updateCurrentPlayer() {
+    const playerIndicator = document.getElementById("player-indicator");
+    if (currentPlayer === 'cross') {
+        playerIndicator.textContent = 'Kreuz';  // Text für Kreuz
+        playerIndicator.style.color = "#FCBF05"; // Gelb für Kreuz
+    } else {
+        playerIndicator.textContent = 'Kreis';  // Text für Kreis
+        playerIndicator.style.color = "#00B0EF"; // Blau für Kreis
+    }
+}
+
 function setField(index) {
     if (fields[index] === null) { // Nur setzen, wenn das Feld leer ist
         fields[index] = currentPlayer; // Setzt den aktuellen Spieler (circle oder cross)
@@ -67,6 +79,7 @@ function setField(index) {
 
         // Wechsel zwischen den Spielern
         currentPlayer = currentPlayer === 'cross' ? 'circle' : 'cross';
+        updateCurrentPlayer();
     }
 }
 

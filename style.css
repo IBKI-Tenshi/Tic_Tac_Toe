@@ -8,12 +8,12 @@ body {
 
 h1 {
     text-align: center;
+    margin-bottom: 0;
 }
 
 #current-player {
     text-align: center;
     font-size: 24px;
-    margin-bottom: 20px;
 }
 
 #player-indicator {
@@ -25,8 +25,6 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    margin-top: 120px;
 }
 
 /* Tabelle ohne äußeren Rand */
@@ -77,6 +75,32 @@ td.cross {
 
 td.circle {
     color: #4c6fff;
+}
+
+#restart-container {
+    text-align: center;
+}
+
+#restart-button {
+    background-color: #323232;
+    color: white;
+    height: 64px;
+    width: 140px;
+
+    border-color: white;
+    border-width: 3px;
+    border-radius: 10px;
+
+    font-size: larger;
+}
+
+#restart-button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.margin-top-56 {
+    margin-top: 56px;
 }
 
 /* Responsive Anpassung für kleinere Bildschirme */

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,21 +12,23 @@
 
 
 </head>
+
 <body onload="init()">
-    
+
     <h1>Tic Tac Toe</h1>
 
     <div id="current-player" style="text-align: center; font-size: 24px; margin-bottom: 20px;">
         Aktueller Spieler: <span id="player-indicator">Kreuz</span>
-    </div>    
+    </div>
 
     <div id="container"></div>
 
-
-    
-
+    <div id="restart-container" style="text-align: center; margin-top: 20px; display: none;">
+        <button id="restart-button" onclick="restartGame()" style="padding: 10px 20px; font-size: 16px;">Restart</button>
+    </div>    
 
     <script src="./script.js"></script>
     <script src="./src/templates/templates.js"></script>
 </body>
+
 </html>

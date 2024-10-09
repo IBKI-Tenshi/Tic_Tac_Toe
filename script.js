@@ -26,8 +26,12 @@ const winningCombinations = [
 let currentPlayer = 'cross'; // Startspieler
 
 function init() {
-    render(); // Das Spielfeld wird beim Laden der Seite gerendert
+    const restartContainer = document.getElementById('restart-container');
+    if (restartContainer) {
+        restartContainer.style.display = 'none'; // Blendet den Restart-Container aus
+    }
     updateCurrentPlayer();
+    render(); // Das Spielfeld wird beim Laden der Seite gerendert
 }
 
 function render() {
@@ -72,9 +76,12 @@ function setField(index) {
         animateField(index);
 
         // Überprüfen, ob das Spiel beendet ist
-        if (isGameFinished()) {
+        const gameResult = isGameFinished(); // Prüft, ob das Spiel zu Ende ist
+        if (gameResult) {
             const winningCombination = getWinningCombination(); // Diese Funktion gibt die Gewinnerkombination zurück
             showWinner(winningCombination); // Zeigt den weißen Strich an
+            showRestartButton(); // Zeigt den Restart-Button nach dem Spielende an
+            return; // Beendet die Funktion, um weitere Züge zu verhindern
         }
 
         // Wechsel zwischen den Spielern
@@ -113,30 +120,47 @@ function isGameFinished() {
 }
 
 function showWinner(winningCombination) {
-    const [firstCell, , lastCell] = winningCombination.map(i => document.getElementById(`cell-${i}`).getBoundingClientRect());
-    
-    // Berechnung der Start- und Endpunkte der Linie
-    const [startX, startY] = [firstCell.left + firstCell.width / 2, firstCell.top + firstCell.height / 2];
-    
-    // Füge eine Verlängerung hinzu, damit die Linie länger als die Zellen ist
-    const extension = 20; // Verlängert die Linie um 20 Pixel
-    const [endX, endY] = [
-        lastCell.left + lastCell.width / 2 + Math.sign(lastCell.left - firstCell.left) * extension,
-        lastCell.top + lastCell.height / 2 + Math.sign(lastCell.top - firstCell.top) * extension
-    ];
+    const container = document.getElementById('container');
+    const cells = winningCombination.map(i => document.getElementById(`cell-${i}`));
+
+    // Berechnung der Startpunkte
+    const middleCell = cells[1].getBoundingClientRect(); // Nimm die mittlere Zelle
+    const startX = middleCell.left + middleCell.width / 2 - container.getBoundingClientRect().left;
+    const startY = middleCell.top + middleCell.height / 2 - container.getBoundingClientRect().top;
+
+    // Berechnung der Endpunkte
+    const extension = 20; // Verlängerung der Linie
+    let endX, endY;
+
+    if (winningCombination[0] === winningCombination[1] && winningCombination[1] === winningCombination[2]) {
+        // Horizontale Linie
+        endX = startX + extension; // Linie dehnt sich nach rechts
+        endY = startY; // Y bleibt gleich
+    } else if (winningCombination[0] % 3 === winningCombination[1] % 3) {
+        // Vertikale Linie
+        endY = startY + extension; // Linie dehnt sich nach unten
+        endX = startX; // X bleibt gleich
+    } else {
+        // Diagonale Linie
+        endX = startX + extension; // Linie dehnt sich nach rechts
+        endY = startY + extension; // Linie dehnt sich nach unten
+    }
 
     // Erstelle eine SVG-Linie und die Animation
     const lineSvg = `
-        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;">
+        <svg style="position: absolute; top: ${container.getBoundingClientRect().top}px; left: ${container.getBoundingClientRect().left}px; width: ${container.offsetWidth}px; height: ${container.offsetHeight}px; z-index: 10;">
             <line x1="${startX}" y1="${startY}" x2="${startX}" y2="${startY}" stroke="white" stroke-width="5" stroke-linecap="round">
                 <animate attributeName="x2" from="${startX}" to="${endX}" dur="500ms" fill="freeze" />
                 <animate attributeName="y2" from="${startY}" to="${endY}" dur="500ms" fill="freeze" />
+                <animate attributeName="x1" from="${startX}" to="${startX - extension}" dur="500ms" fill="freeze" />
+                <animate attributeName="y1" from="${startY}" to="${startY - extension}" dur="500ms" fill="freeze" />
             </line>
         </svg>
     `;
-    
-    document.body.insertAdjacentHTML('beforeend', lineSvg);
+
+    container.insertAdjacentHTML('beforeend', lineSvg);
 }
+
 
 function getWinningCombination() {
     for (const combination of winningCombinations) {
@@ -146,4 +170,18 @@ function getWinningCombination() {
         }
     }
     return null; // Keine Gewinnerkombination gefunden
+}
+
+function showRestartButton() {
+    const restartContainer = document.getElementById('restart-container');
+    if (restartContainer) {
+        restartContainer.style.display = 'block'; // Zeigt den Restart-Container an
+    }
+}
+
+function restartGame() {
+    fields = [null, null, null, null, null, null, null, null, null]; // Setzt die Felder zurück
+    document.querySelector('svg').remove(); // Entfernt die Linie bei einem Sieg, falls vorhanden
+    currentPlayer = 'cross'; // Setzt den Startspieler zurück
+    init(); // Startet das Spiel neu
 }

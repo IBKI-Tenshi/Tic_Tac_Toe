@@ -121,30 +121,18 @@ function isGameFinished() {
 
 function showWinner(winningCombination) {
     const container = document.getElementById('container');
-    const cells = winningCombination.map(i => document.getElementById(`cell-${i}`));
-
-    // Berechnung der Startpunkte
-    const middleCell = cells[1].getBoundingClientRect(); // Nimm die mittlere Zelle
-    const startX = middleCell.left + middleCell.width / 2 - container.getBoundingClientRect().left;
-    const startY = middleCell.top + middleCell.height / 2 - container.getBoundingClientRect().top;
-
-    // Berechnung der Endpunkte
-    const extension = 20; // Verlängerung der Linie
-    let endX, endY;
-
-    if (winningCombination[0] === winningCombination[1] && winningCombination[1] === winningCombination[2]) {
-        // Horizontale Linie
-        endX = startX + extension; // Linie dehnt sich nach rechts
-        endY = startY; // Y bleibt gleich
-    } else if (winningCombination[0] % 3 === winningCombination[1] % 3) {
-        // Vertikale Linie
-        endY = startY + extension; // Linie dehnt sich nach unten
-        endX = startX; // X bleibt gleich
-    } else {
-        // Diagonale Linie
-        endX = startX + extension; // Linie dehnt sich nach rechts
-        endY = startY + extension; // Linie dehnt sich nach unten
-    }
+    const [firstCell, , lastCell] = winningCombination.map(i => document.getElementById(`cell-${i}`).getBoundingClientRect());
+    
+    // Berechnung der Start- und Endpunkte der Linie
+    const [startX, startY] = [firstCell.left + firstCell.width / 2 - container.getBoundingClientRect().left,
+                               firstCell.top + firstCell.height / 2 - container.getBoundingClientRect().top];
+    
+    // Füge eine Verlängerung hinzu, damit die Linie länger als die Zellen ist
+    const extension = 20; // Verlängert die Linie um 20 Pixel
+    const [endX, endY] = [
+        lastCell.left + lastCell.width / 2 + Math.sign(lastCell.left - firstCell.left) * extension - container.getBoundingClientRect().left,
+        lastCell.top + lastCell.height / 2 + Math.sign(lastCell.top - firstCell.top) * extension - container.getBoundingClientRect().top
+    ];
 
     // Erstelle eine SVG-Linie und die Animation
     const lineSvg = `
@@ -152,15 +140,12 @@ function showWinner(winningCombination) {
             <line x1="${startX}" y1="${startY}" x2="${startX}" y2="${startY}" stroke="white" stroke-width="5" stroke-linecap="round">
                 <animate attributeName="x2" from="${startX}" to="${endX}" dur="500ms" fill="freeze" />
                 <animate attributeName="y2" from="${startY}" to="${endY}" dur="500ms" fill="freeze" />
-                <animate attributeName="x1" from="${startX}" to="${startX - extension}" dur="500ms" fill="freeze" />
-                <animate attributeName="y1" from="${startY}" to="${startY - extension}" dur="500ms" fill="freeze" />
             </line>
         </svg>
     `;
-
+    
     container.insertAdjacentHTML('beforeend', lineSvg);
 }
-
 
 function getWinningCombination() {
     for (const combination of winningCombinations) {

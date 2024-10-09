@@ -121,18 +121,15 @@ function isGameFinished() {
 
 function showWinner(winningCombination) {
     const container = document.getElementById('container');
-    const [firstCell, , lastCell] = winningCombination.map(i => document.getElementById(`cell-${i}`).getBoundingClientRect());
+    const cells = winningCombination.map(i => document.getElementById(`cell-${i}`).getBoundingClientRect());
     
-    // Berechnung der Start- und Endpunkte der Linie
-    const [startX, startY] = [firstCell.left + firstCell.width / 2 - container.getBoundingClientRect().left,
-                               firstCell.top + firstCell.height / 2 - container.getBoundingClientRect().top];
+    // Berechnung des Startpunkts: Mitte der ersten Zelle
+    const startX = cells[0].left + cells[0].width / 2 - container.getBoundingClientRect().left;
+    const startY = cells[0].top + cells[0].height / 2 - container.getBoundingClientRect().top;
     
-    // Füge eine Verlängerung hinzu, damit die Linie länger als die Zellen ist
-    const extension = 20; // Verlängert die Linie um 20 Pixel
-    const [endX, endY] = [
-        lastCell.left + lastCell.width / 2 + Math.sign(lastCell.left - firstCell.left) * extension - container.getBoundingClientRect().left,
-        lastCell.top + lastCell.height / 2 + Math.sign(lastCell.top - firstCell.top) * extension - container.getBoundingClientRect().top
-    ];
+    // Berechnung des Endpunkts: Mitte der letzten Zelle
+    const endX = cells[2].left + cells[2].width / 2 - container.getBoundingClientRect().left;
+    const endY = cells[2].top + cells[2].height / 2 - container.getBoundingClientRect().top;
 
     // Erstelle eine SVG-Linie und die Animation
     const lineSvg = `
@@ -146,6 +143,7 @@ function showWinner(winningCombination) {
     
     container.insertAdjacentHTML('beforeend', lineSvg);
 }
+
 
 function getWinningCombination() {
     for (const combination of winningCombinations) {
